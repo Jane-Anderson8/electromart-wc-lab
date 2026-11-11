@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ElectroMart CCC</title>
+  <meta name="theme-color" content="#b3122e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ElectroMart CCC">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>ElectroMart cash conversion cycle</h1>
+    <p class="lede">How long a dollar is tied up in inventory and receivables, less the time ElectroMart takes to pay its suppliers.</p>
+  </header>
+
+  <main>
+    <p id="status" class="status">Loading data…</p>
+
+    <section aria-labelledby="days-title">
+      <h2 id="days-title">Days, Before and After</h2>
+      <p id="year-note" class="note"></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col"></th><th scope="col" class="num">Before</th><th scope="col" class="num">After</th><th scope="col" class="num">Change</th></tr>
+          </thead>
+          <tbody id="days-body"></tbody>
+        </table>
+      </div>
+      <details>
+        <summary>Formulas</summary>
+        <ul class="formulas">
+          <li>DIO = Inventory ÷ COGS × days in year</li>
+          <li>DSO = Accounts receivable ÷ Revenue × days in year (all sales on credit)</li>
+          <li>DPO = Accounts payable ÷ COGS × days in year (purchases equal COGS)</li>
+          <li>CCC = DIO + DSO − DPO</li>
+        </ul>
+      </details>
+    </section>
+
+    <section aria-labelledby="cash-title">
+      <h2 id="cash-title">Cash freed by each lever</h2>
+      <p class="note">A drop in inventory or receivables frees cash. A rise in accounts payable frees cash.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col"></th><th scope="col" class="num wide-only">Before</th><th scope="col" class="num wide-only">After</th><th scope="col" class="num">Cash freed</th></tr>
+          </thead>
+          <tbody id="cash-body"></tbody>
+        </table>
+      </div>
+    </section>
+    <section aria-labelledby="levers-title">
+      <h2 id="levers-title">Levers</h2>
+      <p class="note">Move a slider or type a number of days. Revenue and COGS stay at their Before values.</p>
+
+      <div class="buttons">
+        <button type="button" id="set-before">Set to Before</button>
+        <button type="button" id="set-after">Set to After</button>
+      </div>
+
+      <div class="lever">
+        <label for="dio-range">DIO <span class="sub">Days inventory outstanding</span></label>
+        <input type="range" id="dio-range" min="0" step="any">
+        <input type="number" id="dio-num" min="0" step="any" inputmode="decimal" aria-label="DIO days">
+      </div>
+      <div class="lever">
+        <label for="dso-range">DSO <span class="sub">Days sales outstanding</span></label>
+        <input type="range" id="dso-range" min="0" step="any">
+        <input type="number" id="dso-num" min="0" step="any" inputmode="decimal" aria-label="DSO days">
+      </div>
+      <div class="lever">
+        <label for="dpo-range">DPO <span class="sub">Days payables outstanding</span></label>
+        <input type="range" id="dpo-range" min="0" step="any">
+        <input type="number" id="dpo-num" min="0" step="any" inputmode="decimal" aria-label="DPO days">
+      </div>
+
+      <div class="big" aria-live="polite">
+        <span class="big-label">Cash conversion cycle</span>
+        <span class="big-value"><span id="lever-ccc">–</span> days</span>
+        <span class="sub" id="lever-ccc-change"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">Implied by the days</th><th scope="col" class="num wide-only">Before</th><th scope="col" class="num wide-only">Implied</th><th scope="col" class="num">Cash freed</th></tr>
+          </thead>
+          <tbody id="lever-body"></tbody>
+        </table>
+      </div>
+
+      <dl class="facts">
+        <div>
+          <dt>Interest saved each year <span class="sub">Assumes every freed dollar pays down the bank line, up to its Before balance of <span id="bank-before"></span>, at <span id="bank-rate"></span>. The case's own After balance sheet shows part of the cash was kept instead.</span></dt>
+          <dd id="lever-interest">–</dd>
+        </div>
+        <div>
+          <dt>Days paid past the net <span id="net-days"></span> due date</dt>
+          <dd id="lever-late">–</dd>
+        </div>
+        <div>
+          <dt>Annual cost of skipping the <span id="disc-pct"></span> discount <span class="sub">Nominal rate: d ÷ (1 − d) × <span id="disc-year"></span> ÷ (days paid − <span id="disc-days"></span>)</span></dt>
+          <dd id="lever-discount">–</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    <p>FIN 4150 · Chapter 14: Working Capital Policy. All figures come from the CSV files in data/. Nothing leaves your device.</p>
+  </footer>
+
+  <script src="ccc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
