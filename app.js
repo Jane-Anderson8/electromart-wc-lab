@@ -198,6 +198,16 @@
     el.hidden = !message;
   }
 
+  // Register the service worker so the app installs and works offline.
+  // The relative path keeps it inside this repository's GitHub Pages folder.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function (err) {
+        console.warn('Service worker not registered:', err);
+      });
+    });
+  }
+
   Promise.all([loadText('data/electromart.csv'), loadText('data/assumptions.csv')])
     .then(function (texts) {
       var st = CCC.readStatements(CCC.parseCSV(texts[0]));

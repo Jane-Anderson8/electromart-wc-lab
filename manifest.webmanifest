@@ -1,0 +1,14 @@
+{
+  "name": "ElectroMart Cash Conversion Cycle",
+  "short_name": "ElectroMart CCC",
+  "description": "Cash conversion cycle calculator and working capital levers for the ElectroMart case (FIN 4150).",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#b3122e",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
