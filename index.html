@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ElectroMart CCC</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>ElectroMart cash conversion cycle</h1>
+    <p class="lede">How long a dollar is tied up in inventory and receivables, less the time ElectroMart takes to pay its suppliers.</p>
+  </header>
+
+  <main>
+    <p id="status" class="status">Loading data…</p>
+
+    <section aria-labelledby="days-title">
+      <h2 id="days-title">Days, Before and After</h2>
+      <p id="year-note" class="note"></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col"></th><th scope="col" class="num">Before</th><th scope="col" class="num">After</th><th scope="col" class="num">Change</th></tr>
+          </thead>
+          <tbody id="days-body"></tbody>
+        </table>
+      </div>
+      <details>
+        <summary>Formulas</summary>
+        <ul class="formulas">
+          <li>DIO = Inventory ÷ COGS × days in year</li>
+          <li>DSO = Accounts receivable ÷ Revenue × days in year (all sales on credit)</li>
+          <li>DPO = Accounts payable ÷ COGS × days in year (purchases equal COGS)</li>
+          <li>CCC = DIO + DSO − DPO</li>
+        </ul>
+      </details>
+    </section>
+
+    <section aria-labelledby="cash-title">
+      <h2 id="cash-title">Cash freed by each lever</h2>
+      <p class="note">A drop in inventory or receivables frees cash. A rise in accounts payable frees cash.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col"></th><th scope="col" class="num wide-only">Before</th><th scope="col" class="num wide-only">After</th><th scope="col" class="num">Cash freed</th></tr>
+          </thead>
+          <tbody id="cash-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>FIN 4150 · Chapter 14: Working Capital Policy. All figures come from the CSV files in data/. Nothing leaves your device.</p>
+  </footer>
+
+  <script src="ccc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
