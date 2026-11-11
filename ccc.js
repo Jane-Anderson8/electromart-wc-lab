@@ -117,7 +117,68 @@
     return daysChanged * annualFlow / daysInYear;
   }
 
+  // ---------- The levers ----------
+
+  // The balance a number of days implies: days × annual flow / days in year.
+  // Flow is COGS for inventory and payables, revenue for receivables.
+  function impliedBalance(days, annualFlow, daysInYear) {
+    return days * annualFlow / daysInYear;
+  }
+
+  // Interest saved each year if the cash freed pays down the bank line.
+  // Only the bank line's Before balance can be paid down. If cash freed is
+  // negative, ElectroMart borrows more, so the saving is negative.
+  function interestSaved(cashFreedTotal, bankLineBefore, bankRate) {
+    var paidDown = cashFreedTotal > 0 ? Math.min(cashFreedTotal, bankLineBefore) : cashFreedTotal;
+    return paidDown * bankRate;
+  }
+
+  // Days paid past the net due date, never less than zero.
+  function daysPastDue(dpoDays, netDays) {
+    return Math.max(0, dpoDays - netDays);
+  }
+
+  // Nominal annual cost of skipping the supplier discount:
+  // d / (1 − d) × days in year / (days paid − discount days).
+  // If DPO is within the discount period, ElectroMart takes the discount,
+  // so there is no cost and takesDiscount is true.
+  function discountCost(dpoDays, discount, discountDays, daysInYear) {
+    if (dpoDays <= discountDays) return { takesDiscount: true, rate: 0 };
+    return {
+      takesDiscount: false,
+      rate: discount / (1 - discount) * daysInYear / (dpoDays - discountDays)
+    };
+  }
+
+  // Everything the levers show, for chosen DIO, DSO and DPO days.
+  // Revenue and COGS stay at their Before values.
+  function levers(days, before, assumptions) {
+    var n = assumptions.days_in_year;
+    var inventory = impliedBalance(days.dio, before.cogs, n);
+    var receivables = impliedBalance(days.dso, before.revenue, n);
+    var payables = impliedBalance(days.dpo, before.cogs, n);
+    var freed = {
+      inventory: before.inventory - inventory,
+      receivables: before.accounts_receivable - receivables,
+      payables: payables - before.accounts_payable
+    };
+    freed.total = freed.inventory + freed.receivables + freed.payables;
+    return {
+      ccc: ccc(days.dio, days.dso, days.dpo),
+      balances: { inventory: inventory, receivables: receivables, payables: payables },
+      freed: freed,
+      interestSaved: interestSaved(freed.total, before.notes_payable, assumptions.bank_rate),
+      daysPastDue: daysPastDue(days.dpo, assumptions.net_days),
+      discount: discountCost(days.dpo, assumptions.supplier_discount, assumptions.discount_days, n)
+    };
+  }
+
   var api = {
+    impliedBalance: impliedBalance,
+    interestSaved: interestSaved,
+    daysPastDue: daysPastDue,
+    discountCost: discountCost,
+    levers: levers,
     parseCSV: parseCSV,
     readStatements: readStatements,
     readAssumptions: readAssumptions,
